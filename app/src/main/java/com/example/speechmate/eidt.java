@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,6 +66,7 @@ public class eidt extends AppCompatActivity {
         editSign = findViewById(R.id.edit_sign);
         buttonSave = findViewById(R.id.button_save);
 
+        editPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());//密码不可见
 //        imageViewAvatar = findViewById(R.id.imgavatar);
 
         // 加载用户信息
