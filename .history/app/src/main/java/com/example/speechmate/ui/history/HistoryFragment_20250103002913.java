@@ -4,7 +4,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,89 +30,46 @@ public class HistoryFragment extends Fragment implements RecordingAdapter.OnReco
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("HistoryFragment", "onCreateView called");
         binding = FragmentHistoryBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d("HistoryFragment", "onViewCreated called");
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
         
         setupRecyclerView();
-       
-        observeViewModel();
         setupSearchView();
+        observeViewModel();
     }
 
     private void setupRecyclerView() {
-        
         adapter = new RecordingAdapter(this);
         binding.recyclerView.setAdapter(adapter);
     }
+
     private void setupSearchView() {
-        Log.d("HistoryFragment", "Setting up search view"); // 添加初始化日志
-        if (binding == null) {
-            Log.e("HistoryFragment", "binding is null");
-            return;
-        }
-        if (binding.etSearch == null) {
-            Log.e("HistoryFragment", "etSearch is null");
-            return;
-        }
-        
         binding.etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-    
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String query = s.toString();
-                if (query.isEmpty()) {
-                    // 如果搜索框为空，显示所有记录
-                    viewModel.getAllRecordings().observe(getViewLifecycleOwner(), recordings -> {
-                        adapter.setRecordings(recordings);
-                    });
-                } else {
-                    // 否则过滤记录
-                    Log.d("HistoryFragment", "Search text changed: " + s.toString()); // 添加日志
-                    filterRecordings(query);
-                }
+                filterRecordings(s.toString());
             }
-    
+
             @Override
             public void afterTextChanged(Editable s) {}
         });
-        
     }
-    
 
     private void filterRecordings(String query) {
-        Log.d("HistoryFragment", "Filtering with query: " + query);
-        if (currentRecordings == null || currentRecordings.isEmpty()) {
-            Log.d("HistoryFragment", "No recordings available to filter");
-            return;
-        }
-        
-        List<RecordingEntity> filteredList = new ArrayList<>();
-        for (RecordingEntity recording : currentRecordings) {
-            if (recording.getOriginalText().toLowerCase().contains(query.toLowerCase()) ||
-                recording.getOptimizedText().toLowerCase().contains(query.toLowerCase())) {
-                filteredList.add(recording);
-            }
-        }
-        
-        Log.d("HistoryFragment", "Filtered recordings: " + filteredList.size());
-        adapter.setRecordings(filteredList);
+        viewModel.filterRecordings(query);
     }
-    private List<RecordingEntity> currentRecordings = new ArrayList<>(); 
 
     private void observeViewModel() {
-        viewModel.getAllRecordings().observe(getViewLifecycleOwner(), recordings -> {
-            Log.d("HistoryFragment", "Received recordings: " + (recordings != null ? recordings.size() : "null"));
-            currentRecordings = recordings;
+        viewModel.getFilteredRecordings().observe(getViewLifecycleOwner(), recordings -> {
             adapter.setRecordings(recordings);
         });
     }

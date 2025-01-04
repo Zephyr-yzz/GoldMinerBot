@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.navigation_home) {
                 fragment = new HomeFragment();
             } else if (itemId == R.id.navigation_history) {
+                Log.d("MainActivity", "Switching to HistoryFragment"); // 添加日志
                 fragment = new HistoryFragment();
             } else if (itemId == R.id.navigation_profile) {
                 if(isLogin){

@@ -16,7 +16,17 @@ import java.util.Locale;
 public class RecordingAdapter extends RecyclerView.Adapter<RecordingAdapter.RecordingViewHolder> {
     private List<RecordingEntity> recordings = new ArrayList<>();
     private final OnRecordingListener listener;
-    
+       private final RecordingListener listener;
+    private boolean isEditing = false;
+
+    // 定义接口
+    public interface RecordingListener {
+        void onPlayClick(RecordingEntity recording);
+        void onDeleteClick(RecordingEntity recording);
+        void onEditClick(RecordingEntity recording);
+        void onSaveClick(RecordingEntity recording, String originalText, String optimizedText);
+    }
+
 
     public interface OnRecordingListener {
         void onPlayClick(RecordingEntity recording);

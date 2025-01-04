@@ -31,21 +31,18 @@ public class HistoryFragment extends Fragment implements RecordingAdapter.OnReco
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("HistoryFragment", "onCreateView called");
         binding = FragmentHistoryBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d("HistoryFragment", "onViewCreated called");
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
         
         setupRecyclerView();
-       
-        observeViewModel();
         setupSearchView();
+        observeViewModel();
     }
 
     private void setupRecyclerView() {
@@ -55,15 +52,6 @@ public class HistoryFragment extends Fragment implements RecordingAdapter.OnReco
     }
     private void setupSearchView() {
         Log.d("HistoryFragment", "Setting up search view"); // 添加初始化日志
-        if (binding == null) {
-            Log.e("HistoryFragment", "binding is null");
-            return;
-        }
-        if (binding.etSearch == null) {
-            Log.e("HistoryFragment", "etSearch is null");
-            return;
-        }
-        
         binding.etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -86,34 +74,32 @@ public class HistoryFragment extends Fragment implements RecordingAdapter.OnReco
             @Override
             public void afterTextChanged(Editable s) {}
         });
-        
+        @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;  // 防止内存泄漏
     }
-    
+    }
 
     private void filterRecordings(String query) {
-        Log.d("HistoryFragment", "Filtering with query: " + query);
-        if (currentRecordings == null || currentRecordings.isEmpty()) {
-            Log.d("HistoryFragment", "No recordings available to filter");
-            return;
-        }
-        
-        List<RecordingEntity> filteredList = new ArrayList<>();
-        for (RecordingEntity recording : currentRecordings) {
-            if (recording.getOriginalText().toLowerCase().contains(query.toLowerCase()) ||
-                recording.getOptimizedText().toLowerCase().contains(query.toLowerCase())) {
-                filteredList.add(recording);
+        Log.d("HistoryFragment", "Filtering with query: " + query); // 添加日志
+        List<RecordingEntity> allRecordings = viewModel.getAllRecordings().getValue();
+        if (allRecordings != null) {
+            Log.d("HistoryFragment", "All recordings size: " + allRecordings.size()); // 添加日志
+            List<RecordingEntity> filteredList = new ArrayList<>();
+            for (RecordingEntity recording : allRecordings) {
+                if (recording.getOriginalText().toLowerCase().contains(query.toLowerCase()) ||
+                    recording.getOptimizedText().toLowerCase().contains(query.toLowerCase())) {
+                    filteredList.add(recording);
+                }
             }
+            Log.d("HistoryFragment", "Filtered list size: " + filteredList.size()); // 添加日志
+            adapter.setRecordings(filteredList);
         }
-        
-        Log.d("HistoryFragment", "Filtered recordings: " + filteredList.size());
-        adapter.setRecordings(filteredList);
     }
-    private List<RecordingEntity> currentRecordings = new ArrayList<>(); 
 
     private void observeViewModel() {
         viewModel.getAllRecordings().observe(getViewLifecycleOwner(), recordings -> {
-            Log.d("HistoryFragment", "Received recordings: " + (recordings != null ? recordings.size() : "null"));
-            currentRecordings = recordings;
             adapter.setRecordings(recordings);
         });
     }

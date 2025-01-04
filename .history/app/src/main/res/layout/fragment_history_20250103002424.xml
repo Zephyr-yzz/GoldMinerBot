@@ -10,8 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="搜索历史记录"
-        android:textColorHint="#757575"
-        android:textColor="#000000"
         android:padding="8dp"
         android:inputType="text"
         android:background="@drawable/bg_search"
