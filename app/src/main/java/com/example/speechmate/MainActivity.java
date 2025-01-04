@@ -34,29 +34,9 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNavigation();
         databaseHelper = new DatabaseHelper(this);
 
-//        databaseHelper.delete();
-//        databaseHelper.GetUser(databaseHelper.getUser("yier"));
-        // 检查是否有用户信息传递
-//        if (getIntent().getExtras() != null) {
-//            String nickname = getIntent().getStringExtra("nickname");
-//            String sign = getIntent().getStringExtra("sign");
-//
-//            // 加载 ProfileFragment
-//            ProfileFragment profileFragment = new ProfileFragment();
-//            Bundle args = new Bundle();
-//            args.putString("nickname", nickname);
-//            args.putString("sign", sign);
-//            profileFragment.setArguments(args);
-//
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.fragment_container, profileFragment) // 确保替换为正确的容器 ID
-//                    .commit();
-//            //设置导航栏为选中个人中心
-//            binding.bottomNavigation.setSelectedItemId(R.id.navigation_profile);
-//        } else {
             // 默认加载其他 Fragment
             binding.bottomNavigation.setSelectedItemId(R.id.navigation_home); // 默认选中首页
-//        }
+
     }
 
     private void setupBottomNavigation() {

@@ -25,8 +25,9 @@ public class HelpCenterActivity extends AppCompatActivity {
     private static final List<String> questions = new ArrayList<>();
 
     static {
-        questions.add("How do I create an account?");
-        questions.add("What are the login requirements?");
+        questions.add("怎么创建一个帐户？");
+        questions.add("如何进行录音？");
+        questions.add("如何查看并编辑历史记录？");
         // 添加更多问题...
     }
 

@@ -22,7 +22,7 @@ public class QuestionDetailActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 显示返回按钮
-        toolbar.setNavigationIcon(R.drawable.baseline_keyboard_arrow_left_24); // 设置返回图标，确保你有这个图标
+        toolbar.setNavigationIcon(R.drawable.baseline_keyboard_arrow_left_24); // 设置返回图标
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 显示返回按钮
         getSupportActionBar().setTitle("问题答案"); // 设置标题
 
@@ -38,7 +38,7 @@ public class QuestionDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String question = intent.getStringExtra("question");
 
-        // 这里应该有一个机制来获取问题的回答，这里简单起见，我们假设有一个固定的回答
+
         String answer = getAnswerForQuestion(question);
 
         // 设置TextView来显示回答
@@ -46,12 +46,15 @@ public class QuestionDetailActivity extends AppCompatActivity {
         answerTextView.setText(answer);
     }
 
-    // 这是一个简单的方法，用于根据问题返回回答（在实际应用中，你应该从数据库或API中获取回答）
+
     private String getAnswerForQuestion(String question) {
-        if (question.equals("How do I create an account?")) {
-            return "To create an account, go to the Sign Up page and fill in the required information.";
-        } else if (question.equals("What are the login requirements?")) {
-            return "You need a valid email address and password to log in.";
+        if (question.equals("怎么创建一个帐户？")) {
+            return "在“我的”界面点击“登录/注册”后选择注册，输入个人信息后点击“注册”即可创建一个新账户";
+        } else if (question.equals("如何进行录音？")) {
+            return "在首页点击右下角录音按钮即可开始录音，开始录音后短按录音按钮为暂停，长按录音按钮为结束录音";
+        }
+        else if(question.equals("如何查看并编辑历史记录？")) {
+            return "通过底部导航栏可进入历史记录页面，用户可以查看语音处理的历史记录，可通过搜索框搜索关键词查找特定历史记录，还可以对语音处理内容和录音文本进行编辑修改，播放录音内容和删除历史记录";
         }
         // 添加更多问题和回答...
         return "Sorry, no answer available for this question.";
